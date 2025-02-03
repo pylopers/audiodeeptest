@@ -110,7 +110,6 @@ def favicon():
     return "", 204  # Prevent unnecessary favicon requests
 
 @app.route('/predict', methods=['POST'])
-@tf.function
 def predict():
     try:
         if 'audio_file' not in request.files:
