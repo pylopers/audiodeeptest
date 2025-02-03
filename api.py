@@ -111,18 +111,26 @@ def favicon():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    if 'audio_file' not in request.files:
-        return jsonify({"error": "No audio file uploaded"}), 400
-
-    audio_file = request.files['audio_file']
-    audio_path = "temp_audio.wav"
-    audio_file.save(audio_path)
-
     try:
-        prediction = explain_prediction(audio_path)
-        os.remove(audio_path)  # Clean up temp file
+        if 'audio_file' not in request.files:
+            return jsonify({"error": "No audio file uploaded"}), 400
+
+        audio_file = request.files['audio_file']
+        audio_path = "temp_audio.wav"
+        audio_file.save(audio_path)
+
+        try:
+            prediction = explain_prediction(audio_path)
+        except Exception as e:
+            print(f"Error during prediction: {e}")
+            return jsonify({"error": f"Prediction failed: {str(e)}"}), 500
+
+        finally:
+            os.remove(audio_path)  # Ensure cleanup
+
         return jsonify(prediction)
     except Exception as e:
+        print(f"Error processing request: {e}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
