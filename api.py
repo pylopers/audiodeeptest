@@ -64,7 +64,9 @@ def home():
     return jsonify({"message": "Welcome to the Audio Deepfake Detection API!"})
 
 @app.route('/predict', methods=['POST'])
-def predict():
+
+@tf.function
+def predict_ensemble(features):
     if 'audio_file' not in request.files:
         return jsonify({"error": "No audio file uploaded"}), 400
 
