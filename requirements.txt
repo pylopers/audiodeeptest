@@ -7,5 +7,7 @@ librosa==0.10.2.post1
 numpy==1.26.4
 tensorflow[and-cuda]
 transformers==4.45.2
+matplotlib
+scikit-learn
 
 --extra-index-url https://download.pytorch.org/whl/cu118
